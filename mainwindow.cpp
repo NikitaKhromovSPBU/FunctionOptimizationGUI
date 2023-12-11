@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "settings.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,3 +13,11 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_actionSettings_triggered()
+{
+    Settings settings_window;
+    settings_window.setModal(true);
+    settings_window.exec();
+}
+
