@@ -3,6 +3,17 @@
 
 #include <QMainWindow>
 
+#include "AbsoluteValueDifferenceSC.h"
+#include "ExpModulatedSin.h"
+#include "FletcherReevesOptimizer.h"
+#include "HimmelblauFunction.h"
+#include "IterationsNumberSC.h"
+#include "LeviFunction.h"
+#include "RectangularArea.h"
+#include "RelativeDifferenceSC.h"
+#include "RosenbrockFunction.h"
+#include "StohasticOptimizer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -22,5 +33,13 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    // Settings
+    int function_id, method_id, criterion_id;
+    size_t max_iterations;
+    RectangularArea rect_area;
+    GeneralFunction *function;
+    GeneralOptimizer *optimizer;
+    GeneralStopCriterion *stop_criterion;
 };
 #endif // MAINWINDOW_H

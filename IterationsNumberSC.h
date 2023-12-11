@@ -22,8 +22,8 @@ class IterationsNumberSC : public GeneralStopCriterion
      * \param function Is not used in this criterion.
      * \return true if the optimization process should be stopped, false otherwise.
      */
-    bool stop_criterion(const std::vector<std::vector<double>> &trajectory,
-                        const GeneralFunction *function = nullptr) const override
+    bool stop_criterion(const std::vector<std::vector<double>> &,
+                        const GeneralFunction *) const override
     {
         return false;
     };

@@ -268,6 +268,9 @@
            <property name="text">
             <string>Absolute function difference</string>
            </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -300,15 +303,24 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="max_iter">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="precision"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="max_iter">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>999999999</number>
+         </property>
+         <property name="stepType">
+          <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+         </property>
+         <property name="value">
+          <number>1000</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -325,9 +337,9 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QVBoxLayout" name="method_layout">
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="fr_method">
            <property name="text">
             <string>Fletcher-Reeves conjugate gradient</string>
            </property>
@@ -337,7 +349,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="stohastic_method">
            <property name="text">
             <string>Stohastic</string>
            </property>
@@ -356,6 +368,23 @@
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="1" column="2">
+            <widget class="QDoubleSpinBox" name="alpha_spin">
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSlider" name="p_slider">
+             <property name="maximum">
+              <number>99</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_14">
              <property name="toolTip">
@@ -369,33 +398,6 @@
              </property>
              <property name="text">
               <string>p:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSlider" name="p_slider">
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="p_edit">
-             <property name="text">
-              <string>0</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_16">
-             <property name="toolTip">
-              <string>delta reduction rate</string>
-             </property>
-             <property name="text">
-              <string>alpha:</string>
              </property>
             </widget>
            </item>
@@ -415,10 +417,23 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="alpha_edit">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="toolTip">
+              <string>delta reduction rate</string>
+             </property>
              <property name="text">
-              <string>1</string>
+              <string>alpha:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QDoubleSpinBox" name="p_spin">
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
              </property>
             </widget>
            </item>

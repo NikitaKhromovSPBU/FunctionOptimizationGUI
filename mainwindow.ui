@@ -30,7 +30,14 @@
     </property>
     <addaction name="actionSettings"/>
    </widget>
+   <widget class="QMenu" name="menuOptimize">
+    <property name="title">
+     <string>Optimize</string>
+    </property>
+    <addaction name="actionOptimize"/>
+   </widget>
    <addaction name="menuSettings"/>
+   <addaction name="menuOptimize"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -43,6 +50,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionSettings"/>
+   <addaction name="actionOptimize"/>
   </widget>
   <action name="actionSettings">
    <property name="icon">
@@ -54,6 +62,21 @@
    </property>
    <property name="menuRole">
     <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionOptimize">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/play.ico</normaloff>:/icons/icons/play.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Optimize</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+O</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
  </widget>
