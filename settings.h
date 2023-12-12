@@ -22,6 +22,8 @@ public:
     // getters/setters
     int get_function();
 
+    QString get_function_name();
+
     int get_method();
 
     int get_criterion();

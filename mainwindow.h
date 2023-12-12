@@ -29,13 +29,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void plot_graph(const std::vector<std::vector<double>>& grid);
+
 private slots:
     void on_actionSettings_triggered();
+
+    void on_actionOptimize_triggered();
 
 private:
     Ui::MainWindow *ui;
 
     // Settings
+    bool settings_set;
     int function_id, method_id, criterion_id;
     size_t max_iterations, sample_rate;
     double precision, p, alpha, delta;

@@ -6,8 +6,8 @@
 Settings::Settings(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Settings), functions(this), methods(this), criteria(this),
-    bounds_validator(new QRegularExpressionValidator(QRegularExpression("[-,+]{0,1}[0-9]+[.][0-9]+"), 0)),
-    precision_validator(new QRegularExpressionValidator(QRegularExpression("[+]{0,1}[0-9]+[.][0-9]+"), 0))
+    bounds_validator(new QRegularExpressionValidator(QRegularExpression("(^([+-]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+))(?:[Ee][+-]?[0-9]+)?$)"), 0)),
+    precision_validator(new QRegularExpressionValidator(QRegularExpression("(^([+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+))(?:[Ee][+-]?[0-9]+)?$)"), 0))
 {
     ui->setupUi(this);
 
@@ -154,6 +154,10 @@ int Settings::get_function() {
     return functions.checkedId();
 }
 
+QString Settings::get_function_name() {
+    return functions.checkedButton()->text();
+}
+
 int Settings::get_method() {
     return methods.checkedId();
 }
@@ -234,11 +238,11 @@ void Settings::set_criterion(int id) {
 }
 
 void Settings::set_max_iterations(size_t n) {
-    ui->max_iter->setValue(n);
+    ui->max_iter->setValue(static_cast<int>(n));
 }
 
 void Settings::set_sampling_rate(size_t sr) {
-    ui->sampling_rate->setValue(sr);
+    ui->sampling_rate->setValue(static_cast<int>(sr));
 }
 
 void Settings::set_precision(double e) {
