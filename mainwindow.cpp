@@ -1,17 +1,33 @@
+#pragma once
 #include "mainwindow.h"
 #include "settings.h"
 #include "ui_mainwindow.h"
+#include "AbsoluteValueDifferenceSC.h"
+#include "ExpModulatedSin.h"
+#include "FletcherReevesOptimizer.h"
+#include "HimmelblauFunction.h"
+#include "IterationsNumberSC.h"
+#include "LeviFunction.h"
+#include "RelativeDifferenceSC.h"
+#include "RosenbrockFunction.h"
+#include "StohasticOptimizer.h"
+
+#include <limits>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), settings_set(false), function_id(4), method_id(1), criterion_id(1), max_iterations(1000),
-    sample_rate(1), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0, 0}), rect_area(3)
+    sample_rate(10), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0, 0}), rect_area(3),
+    function(nullptr), optimizer(nullptr), stop_criterion(nullptr)
 {
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
+    delete function;
+    delete stop_criterion;
+    delete optimizer;
     delete ui;
 }
 
@@ -75,10 +91,6 @@ void MainWindow::on_actionOptimize_triggered()
     if (!settings_set)
         return;
 
-    GeneralFunction *function{};
-    GeneralStopCriterion *criterion{};
-    GeneralOptimizer *optimizer{};
-
     switch(function_id) {
     case 1:
         function = new ExpModulatedSin();
@@ -98,13 +110,13 @@ void MainWindow::on_actionOptimize_triggered()
 
     switch(criterion_id) {
     case 1:
-        criterion = new IterationsNumberSC(max_iterations);
+        stop_criterion = new IterationsNumberSC(max_iterations);
         break;
     case 2:
-        criterion = new AbsoluteValueDifferenceSC(max_iterations, precision);
+        stop_criterion = new AbsoluteValueDifferenceSC(max_iterations, precision);
         break;
     case 3:
-        criterion = new RelativeDifferenceSC(max_iterations, precision);
+        stop_criterion = new RelativeDifferenceSC(max_iterations, precision);
         break;
     default:
         throw std::invalid_argument("Undefuned stopping criterion ID encountered");
@@ -112,10 +124,10 @@ void MainWindow::on_actionOptimize_triggered()
 
     switch(method_id) {
     case 1:
-        optimizer = new FletcherReevesOptimizer(function, starting_point, rect_area, criterion);
+        optimizer = new FletcherReevesOptimizer(function, starting_point, rect_area, stop_criterion);
         break;
     case 2:
-        optimizer = new StohasticOptimizer(function, starting_point, rect_area, criterion, p, delta, alpha);
+        optimizer = new StohasticOptimizer(function, starting_point, rect_area, stop_criterion, p, delta, alpha);
         break;
     default:
         throw std::invalid_argument("Undefuned optimization method ID encountered");
@@ -137,18 +149,69 @@ void MainWindow::on_actionOptimize_triggered()
 
     ui->end_func_value->setText(QString::number(last_function_value, 'g', 8));
 
-    std::vector<std::vector<double>> grid;
+    if (function->get_dimensions() == 2){
+        std::vector<std::vector<double>> grid(make_grid());
 
-    plot_graph(grid);
+        plot_graph(grid);
+    }
+}
 
-    delete function;
-    delete criterion;
-    delete optimizer;
+std::vector<std::vector<double>> MainWindow::make_grid() {
+    int plot_width = ui->function_plot->frameGeometry().width();
+    int plot_height = ui->function_plot->frameGeometry().height();
+    int grid_width = plot_width / static_cast<int>(sample_rate);
+    int grid_height = plot_height / static_cast<int>(sample_rate);
+
+    std::vector<std::vector<double>> grid(grid_height, std::vector<double>(grid_width));
+
+    double grid_step_x = (rect_area[1] - rect_area[0]) / grid_width;
+    double grid_step_y = (rect_area[3] - rect_area[2]) / grid_height;
+
+    std::vector<double> point{rect_area[0], rect_area[2]};
+
+    for (int i{}; i < grid_height; ++i) {
+        for (int j{}; j < grid_width; ++j) {
+            grid[i][j] = function->evaluate(point);
+
+            point[0] += grid_step_x;
+        }
+        point[0] = rect_area[0];
+        point[1] += grid_step_y;
+    }
+
+    return grid;
 }
 
 void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
     QGraphicsScene *scene = new QGraphicsScene(ui->function_plot);
 
+    double max_value = -std::numeric_limits<double>::infinity();
+    double min_value = std::numeric_limits<double>::infinity();
+
+    for(size_t i{}; i < grid.size(); ++i) {
+        for(size_t j{}; j < grid[0].size(); ++j) {
+            if (grid[i][j] > max_value)
+                max_value = grid[i][j];
+            if (grid[i][j] < min_value)
+                min_value = grid[i][j];
+        }
+    }
+
+
+
+    double interval_length = max_value - min_value;
+
+    for (unsigned i{}; i < grid.size(); ++i) {
+        for (unsigned j{}; j < grid[0].size(); ++j) {
+            double proportion = (grid[i][j] - min_value) / interval_length;
+            int blue_shade = 255 * proportion;
+            int green_shade = 255 * (1 - proportion);
+            QPen pen(QColor(0, green_shade, blue_shade));
+            QBrush brush(QColor(0, green_shade, blue_shade));
+
+            scene->addRect(rect_area[0] + j * sample_rate, rect_area[3] - i * sample_rate, sample_rate, sample_rate, pen, brush);
+        }
+    }
 
     ui->function_plot->setScene(scene);
 }

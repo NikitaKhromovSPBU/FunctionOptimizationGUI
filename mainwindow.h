@@ -4,16 +4,10 @@
 #include <QMainWindow>
 #include <vector>
 
-#include "AbsoluteValueDifferenceSC.h"
-#include "ExpModulatedSin.h"
-#include "FletcherReevesOptimizer.h"
-#include "HimmelblauFunction.h"
-#include "IterationsNumberSC.h"
-#include "LeviFunction.h"
 #include "RectangularArea.h"
-#include "RelativeDifferenceSC.h"
-#include "RosenbrockFunction.h"
-#include "StohasticOptimizer.h"
+#include "GeneralFunction.h"
+#include "GeneralStopCriterion.h"
+#include "GeneralOptimizer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,8 +22,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-    void plot_graph(const std::vector<std::vector<double>>& grid);
 
 private slots:
     void on_actionSettings_triggered();
@@ -49,5 +41,9 @@ private:
     GeneralFunction *function;
     GeneralOptimizer *optimizer;
     GeneralStopCriterion *stop_criterion;
+
+    // Intermediate methods
+    std::vector<std::vector<double>> make_grid();
+    void plot_graph(const std::vector<std::vector<double>>& grid);
 };
 #endif // MAINWINDOW_H
