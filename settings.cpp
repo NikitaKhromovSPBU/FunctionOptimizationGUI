@@ -117,10 +117,38 @@ void Settings::on_stohastic_method_toggled(bool checked)
     }
 }
 
-void Settings::on_buttonBox_accepted()
-{
+void Settings::accept() {
+    RectangularArea area(get_area());
+    if(!area.is_valid()) {
+        QMessageBox::warning(this, "Incorrect bounds", "Left bounds must be less than right bounds for area");
+        return;
+    }
 
+    std::vector<double> starting_point = get_starting_point();
+
+    if (!area.contains(starting_point)) {
+        QMessageBox::warning(this, "Incorrect starting point", "Starting point must be within the area");
+        return;
+    }
+
+    double delta = get_delta(),
+        p = get_p(), e = get_precision();
+
+
+    if (p > 0 && delta == 0) {
+        QMessageBox::warning(this, "Incorrect radius delta", "Radius delta must be positive if p > 0");
+        return;
+    }
+
+    if (criteria.checkedId() != 1 && e == 0) {
+        QMessageBox::warning(this, "Incorrect precision value", "Precision must be positive");
+        return;
+    }
+
+    QDialog::accept();
 }
+
+// getters/setters
 
 int Settings::get_function() {
     return functions.checkedId();
@@ -132,6 +160,59 @@ int Settings::get_method() {
 
 int Settings::get_criterion() {
     return criteria.checkedId();
+}
+
+size_t Settings::get_max_iterations() {
+    return ui->max_iter->value();
+}
+
+size_t Settings::get_sampling_rate() {
+    return ui->sampling_rate->value();
+}
+
+double Settings::get_precision() {
+    return ui->precision->text().toDouble();
+}
+
+double Settings::get_p() {
+    return ui->p_spin->value();
+}
+
+double Settings::get_delta() {
+    return ui->delta->text().toDouble();
+}
+
+double Settings::get_alpha() {
+    return ui->alpha_spin->value();
+}
+
+std::vector<double> Settings::get_area() {
+    std::vector<double> result(4);
+
+    result[0] = ui->lb_x->text().toDouble();
+    result[1] = ui->rb_x->text().toDouble();
+
+    result[2] = ui->lb_y->text().toDouble();
+    result[3] = ui->rb_y->text().toDouble();
+
+    if (functions.checkedId() == 4) {
+        result.push_back(ui->lb_z->text().toDouble());
+        result.push_back(ui->rb_z->text().toDouble());
+    }
+
+    return result;
+}
+
+std::vector<double> Settings::get_starting_point() {
+    std::vector<double> result(2);
+
+    result[0] = ui->start_x->text().toDouble();
+    result[1] = ui->start_y->text().toDouble();
+    if (functions.checkedId() == 4) {
+        result.push_back(ui->start_z->text().toDouble());
+    }
+
+    return result;
 }
 
 void Settings::set_function(int id) {
@@ -152,4 +233,55 @@ void Settings::set_criterion(int id) {
     }
 }
 
+void Settings::set_max_iterations(size_t n) {
+    ui->max_iter->setValue(n);
+}
 
+void Settings::set_sampling_rate(size_t sr) {
+    ui->sampling_rate->setValue(sr);
+}
+
+void Settings::set_precision(double e) {
+    ui->precision->setText(QString::number(e, 'g', 16));
+}
+
+void Settings::set_p(double p) {
+    ui->p_spin->setValue(p);
+}
+
+void Settings::set_delta(double d) {
+    ui->delta->setText(QString::number(d, 'g', 16));
+}
+
+void Settings::set_alpha(double a) {
+    ui->alpha_spin->setValue(a);
+}
+
+
+void Settings::set_area(const RectangularArea &rect) {
+    ui->lb_x->setText(QString::number(rect[0], 'g', 16));
+    ui->rb_x->setText(QString::number(rect[1], 'g', 16));
+    ui->lb_y->setText(QString::number(rect[2], 'g', 16));
+    ui->rb_y->setText(QString::number(rect[3], 'g', 16));
+
+    if (functions.checkedId() == 4) {
+        ui->lb_z->setText(QString::number(rect[4], 'g', 16));
+        ui->rb_z->setText(QString::number(rect[5], 'g', 16));
+    }
+    else {
+        ui->lb_z->setText(QString::number(0));
+        ui->rb_z->setText(QString::number(0));
+    }
+}
+
+void Settings::set_starting_point(const std::vector<double> &x) {
+    ui->start_x->setText(QString::number(x[0], 'g', 16));
+    ui->start_y->setText(QString::number(x[1], 'g', 16));
+
+    if (functions.checkedId() == 4) {
+        ui->start_z->setText(QString::number(x[2], 'g', 16));
+    }
+    else {
+        ui->start_z->setText(QString::number(0));
+    }
+}

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <vector>
 
 #include "AbsoluteValueDifferenceSC.h"
 #include "ExpModulatedSin.h"
@@ -36,7 +37,9 @@ private:
 
     // Settings
     int function_id, method_id, criterion_id;
-    size_t max_iterations;
+    size_t max_iterations, sample_rate;
+    double precision, p, alpha, delta;
+    std::vector<double> starting_point;
     RectangularArea rect_area;
     GeneralFunction *function;
     GeneralOptimizer *optimizer;
