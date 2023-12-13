@@ -11,7 +11,7 @@ bool AbsoluteValueDifferenceSC::stop_criterion(const std::vector<std::vector<dou
     {
     };
 
-    if (iter == trajectory.rend() || (iter - last_point < _iterations_number / 10 &&
+    if (iter == trajectory.rend() || (iter - last_point < static_cast<long long>(_iterations_number) / 10 &&
                                       function->evaluate(*iter) - function->evaluate(*last_point) >= _precision))
         return false;
     return true;

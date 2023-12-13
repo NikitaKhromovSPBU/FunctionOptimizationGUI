@@ -13,9 +13,11 @@ bool RelativeDifferenceSC::stop_criterion(const std::vector<std::vector<double>>
 
     double previous_function_value;
     if (iter == trajectory.rend() ||
-        (iter - last_point < _iterations_number / 10 &&
-         ((previous_function_value = function->evaluate(*iter)) - function->evaluate(*last_point)) /
-                 abs(previous_function_value) >= _precision))
-        return false;
+        (iter - last_point < static_cast<long long>(_iterations_number) / 10)) {
+        previous_function_value = function->evaluate(*iter);
+        if ((previous_function_value - function->evaluate(*last_point)) /
+                 abs(previous_function_value) >= _precision)
+            return false;
+    }
     return true;
 }

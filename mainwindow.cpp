@@ -223,9 +223,9 @@ void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
             }
             QPen pen(QColor(0, green_shade, blue_shade));
             QBrush brush(QColor(0, green_shade, blue_shade));
-            int pix_length_x = sample_rate * (j + 1) < scene_width ? sample_rate : scene_width - j * sample_rate;
-            int pix_length_y = sample_rate * (i + 1) < scene_height ? sample_rate : scene_height - i * sample_rate;
-            scene->addRect(j * sample_rate, scene_height - i * sample_rate, pix_length_x, pix_length_y, pen, brush);
+            size_t pix_length_x = sample_rate * (j + 1) < scene_width ? sample_rate : scene_width - j * sample_rate;
+            size_t pix_length_y = sample_rate * (i + 1) < scene_height ? sample_rate : scene_height - i * sample_rate;
+            scene->addRect(j * sample_rate, scene_height - i * sample_rate, static_cast<int>(pix_length_x), static_cast<int>(pix_length_y), pen, brush);
         }
     }
     plot_trajectory(optimizer->get_trajectory(), scene);
