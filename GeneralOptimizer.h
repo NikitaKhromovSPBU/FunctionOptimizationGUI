@@ -69,6 +69,16 @@ class GeneralOptimizer
         return *_trajectory.rbegin();
     };
 
+    const std::vector<std::vector<double>>& get_trajectory() const
+    {
+        return _trajectory;
+    }
+
+    std::vector<std::vector<double>>& get_trajectory()
+    {
+        return _trajectory;
+    }
+
     size_t trajectory_size() const
     {
         return _trajectory.size();

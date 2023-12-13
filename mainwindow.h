@@ -2,12 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
 #include <vector>
 
 #include "RectangularArea.h"
 #include "GeneralFunction.h"
 #include "GeneralStopCriterion.h"
 #include "GeneralOptimizer.h"
+#include "plotscene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,6 +30,8 @@ private slots:
 
     void on_actionOptimize_triggered();
 
+    void on_scene_clicked(QPointF point);
+
 private:
     Ui::MainWindow *ui;
 
@@ -45,5 +49,6 @@ private:
     // Intermediate methods
     std::vector<std::vector<double>> make_grid();
     void plot_graph(const std::vector<std::vector<double>>& grid);
+    void plot_trajectory(const std::vector<std::vector<double>>& trajectory, PlotScene* scene);
 };
 #endif // MAINWINDOW_H

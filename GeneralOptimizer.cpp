@@ -2,7 +2,7 @@
 
 GeneralOptimizer::GeneralOptimizer(const GeneralFunction *f, const std::vector<double> &starting_point,
                                    RectangularArea area, const GeneralStopCriterion *sc)
-    : _area(std::move(area)), _function(f), _sc(sc), _trajectory({starting_point}),
+    : _function(f), _trajectory({starting_point}), _sc(sc), _area(std::move(area)),
       _result_function_value(std::numeric_limits<double>::quiet_NaN())
 {
     if (!_area.contains(starting_point))

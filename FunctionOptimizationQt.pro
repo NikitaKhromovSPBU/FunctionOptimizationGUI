@@ -24,6 +24,7 @@ SOURCES += \
     RelativeDifferenceSC.cpp \
     RosenbrockFunction.cpp \
     StohasticOptimizer.cpp \
+    plotscene.cpp \
     settings.cpp
 
 HEADERS += \
@@ -41,6 +42,7 @@ HEADERS += \
     RelativeDifferenceSC.h \
     RosenbrockFunction.h \
     StohasticOptimizer.h \
+    plotscene.h \
     settings.h
 
 FORMS += \

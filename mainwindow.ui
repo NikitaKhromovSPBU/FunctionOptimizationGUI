@@ -29,6 +29,9 @@
         <height>1000</height>
        </size>
       </property>
+      <property name="resizeAnchor">
+       <enum>QGraphicsView::AnchorViewCenter</enum>
+      </property>
      </widget>
     </item>
     <item>
