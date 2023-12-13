@@ -17,7 +17,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), settings_set(false), function_id(4), method_id(1), criterion_id(1), max_iterations(1000),
+    , ui(new Ui::MainWindow), settings_set(false), function_id(2), method_id(1), criterion_id(1), max_iterations(1000),
     sample_rate(10), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0, 0}), rect_area(3),
     function(nullptr), optimizer(nullptr), stop_criterion(nullptr)
 {
@@ -189,7 +189,8 @@ std::vector<std::vector<double>> MainWindow::make_grid() {
 void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
     PlotScene *scene = new PlotScene(ui->function_plot);
     connect(scene, &PlotScene::sceneClicked, this, &MainWindow::on_scene_clicked);
-    double scene_height = ui->function_plot->height();
+    int scene_width = ui->function_plot->width();
+    int scene_height = ui->function_plot->height();
 
     double max_value = -std::numeric_limits<double>::infinity();
     double min_value = std::numeric_limits<double>::infinity();
@@ -222,8 +223,9 @@ void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
             }
             QPen pen(QColor(0, green_shade, blue_shade));
             QBrush brush(QColor(0, green_shade, blue_shade));
-
-            scene->addRect(j * sample_rate, scene_height - i * sample_rate, sample_rate, sample_rate, pen, brush);
+            int pix_length_x = sample_rate * (j + 1) < scene_width ? sample_rate : scene_width - j * sample_rate;
+            int pix_length_y = sample_rate * (i + 1) < scene_height ? sample_rate : scene_height - i * sample_rate;
+            scene->addRect(j * sample_rate, scene_height - i * sample_rate, pix_length_x, pix_length_y, pen, brush);
         }
     }
     plot_trajectory(optimizer->get_trajectory(), scene);

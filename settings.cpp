@@ -15,6 +15,12 @@ Settings::Settings(QWidget *parent)
     ui->label_precision->hide();
     ui->precision->hide();
     ui->stohastic_parameters_box->hide();
+    ui->start_z->hide();
+    ui->label_start_z->hide();
+    ui->lb_z->hide();
+    ui->rb_z->hide();
+    ui->label_lb_z->hide();
+    ui->label_rb_z->hide();
 
     // creating radio buttons groups
     functions.addButton(ui->rad1_exp_sin, 1);
