@@ -36,7 +36,6 @@ private:
     Ui::MainWindow *ui;
 
     // Settings
-    bool settings_set;
     int function_id, method_id, criterion_id;
     size_t max_iterations, sample_rate;
     double precision, p, alpha, delta;
@@ -47,6 +46,7 @@ private:
     GeneralStopCriterion *stop_criterion;
 
     // Intermediate methods
+    void optimization_setup();
     std::vector<std::vector<double>> make_grid();
     void plot_graph(const std::vector<std::vector<double>>& grid);
     void plot_trajectory(const std::vector<std::vector<double>>& trajectory, PlotScene* scene);

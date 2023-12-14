@@ -1,4 +1,3 @@
-#pragma once
 #include "mainwindow.h"
 #include "settings.h"
 #include "ui_mainwindow.h"
@@ -17,11 +16,15 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), settings_set(false), function_id(2), method_id(1), criterion_id(1), max_iterations(1000),
-    sample_rate(10), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0, 0}), rect_area(3),
+    , ui(new Ui::MainWindow), function_id(2), method_id(1), criterion_id(1), max_iterations(1000),
+    sample_rate(10), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0}), rect_area(std::vector<double>{-6, 6, -6, 6}),
     function(nullptr), optimizer(nullptr), stop_criterion(nullptr)
 {
     ui->setupUi(this);
+
+    optimization_setup();
+    std::vector<std::vector<double>> grid(make_grid());
+    plot_graph(grid);
 }
 
 MainWindow::~MainWindow()
@@ -59,7 +62,6 @@ void MainWindow::on_actionSettings_triggered()
         delta = settings.get_delta();
         rect_area.set_bounds(settings.get_area());
         starting_point = settings.get_starting_point();
-        settings_set = true;
 
         ui->x_start->setText(QString::number(starting_point[0], 'g', 2));
         ui->y_start->setText(QString::number(starting_point[1], 'g', 2));
@@ -83,15 +85,7 @@ void MainWindow::on_actionSettings_triggered()
     }
 }
 
-
-void MainWindow::on_actionOptimize_triggered()
-{
-    if (!settings_set)
-        on_actionSettings_triggered();
-
-    if (!settings_set)
-        return;
-
+void MainWindow::optimization_setup() {
     delete function;
     delete stop_criterion;
     delete optimizer;
@@ -137,6 +131,11 @@ void MainWindow::on_actionOptimize_triggered()
     default:
         throw std::invalid_argument("Undefuned optimization method ID encountered");
     }
+}
+
+void MainWindow::on_actionOptimize_triggered()
+{
+    optimization_setup();
 
     optimizer->optimize();
 
@@ -223,8 +222,8 @@ void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
             }
             QPen pen(QColor(0, green_shade, blue_shade));
             QBrush brush(QColor(0, green_shade, blue_shade));
-            size_t pix_length_x = sample_rate * (j + 1) < scene_width ? sample_rate : scene_width - j * sample_rate;
-            size_t pix_length_y = sample_rate * (i + 1) < scene_height ? sample_rate : scene_height - i * sample_rate;
+            size_t pix_length_x = sample_rate * (j + 1) < static_cast<size_t>(scene_width) ? sample_rate : static_cast<size_t>(scene_width) - j * sample_rate;
+            size_t pix_length_y = sample_rate * (i + 1) < static_cast<size_t>(scene_height) ? sample_rate : static_cast<size_t>(scene_height) - i * sample_rate;
             scene->addRect(j * sample_rate, scene_height - i * sample_rate, static_cast<int>(pix_length_x), static_cast<int>(pix_length_y), pen, brush);
         }
     }
@@ -234,7 +233,7 @@ void MainWindow::plot_graph(const std::vector<std::vector<double>>& grid) {
 }
 
 void MainWindow::on_scene_clicked(QPointF point) {
-    if (!settings_set || function_id == 4)
+    if (function_id == 4)
         return;
 
     int plot_width = ui->function_plot->frameGeometry().width();

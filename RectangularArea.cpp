@@ -5,7 +5,7 @@ double& RectangularArea::operator[](size_t i)
     return _bounds[i];
 }
 
-const double RectangularArea::operator[](size_t i) const
+double RectangularArea::operator[](size_t i) const
 {
     return _bounds[i];
 }
