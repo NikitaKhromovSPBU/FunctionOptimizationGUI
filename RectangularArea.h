@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 #include <vector>
 
 class RectangularArea
@@ -29,13 +30,13 @@ class RectangularArea
      * \param dimensions Number of dimensions of the RectangularArea object.
      */
     RectangularArea(const std::vector<double> &bounds)
-        : _dimensions(bounds.size() % 2 == 0 ? bounds.size() / 2 : throw std::exception("Odd number of bounds.")),
+        : _dimensions(bounds.size() % 2 == 0 ? bounds.size() / 2 : throw std::logic_error("Odd number of bounds.")),
           _bounds(bounds){};
 
     void set_bounds(const std::vector<double> &bounds)
     {
         if (bounds.size() % 2 != 0)
-            throw std::exception("Odd number of bounds.");
+            throw std::logic_error("Odd number of bounds.");
 
         _bounds = bounds;
         _dimensions = _bounds.size() / 2;
@@ -44,7 +45,7 @@ class RectangularArea
     void set_bounds(std::vector<double>&& bounds)
     {
         if (bounds.size() % 2 != 0)
-            throw std::exception("The number of bounds must be even.");
+            throw std::logic_error("Odd number of bounds.");
 
         _bounds = std::move(bounds);
         _dimensions = _bounds.size() / 2;
@@ -83,7 +84,7 @@ class RectangularArea
      * \param point A vector of coordinates of the point in question. Must be of length equal to the number of
      * dimensions of the RectangularArea object.
      * \return true if the point lies within the rectangle, false otherwise.
-     * \throw std::exception point size and number of dimensions are not equal.
+     * \throw std::logic_error point size and number of dimensions are not equal.
      */
     bool contains(const std::vector<double> &point) const;
 };

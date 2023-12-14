@@ -1,9 +1,10 @@
 #include "RosenbrockFunction.h"
+#include <stdexcept>
 
 double RosenbrockFunction::evaluate(const std::vector<double> &parameters) const
 {
     if (parameters.size() != get_dimensions())
-        throw std::exception("Wrong number of parameters");
+        throw std::logic_error("Wrong number of parameters");
     return 100 * (parameters[1] - parameters[0] * parameters[0]) * (parameters[1] - parameters[0] * parameters[0]) +
            (parameters[0] - 1) * (parameters[0] - 1) +
            100 * (parameters[2] - parameters[1] * parameters[1]) * (parameters[2] - parameters[1] * parameters[1]) +
@@ -13,7 +14,7 @@ double RosenbrockFunction::evaluate(const std::vector<double> &parameters) const
 std::vector<double> RosenbrockFunction::get_gradient(const std::vector<double> &parameters) const
 {
     if (parameters.size() != get_dimensions())
-        throw std::exception("Wrong number of parameters");
+        throw std::logic_error("Wrong number of parameters");
     return std::vector<double>{
         2 * (200 * parameters[0] * (parameters[0] * parameters[0] - parameters[1]) + parameters[0] - 1),
         2 * (200 * parameters[1] * (parameters[1] * parameters[1] - parameters[2]) -

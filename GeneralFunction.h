@@ -37,7 +37,7 @@ class GeneralFunction
      *
      * \param parameters Coordinates in which the function is evaluated.
      * \return Value of the function on the given parameters.
-     * \throw std::exception parameters size and number of dimensions are not equal.
+     * \throw std::domain_error parameters size and number of dimensions are not equal.
      */
     virtual double evaluate(const std::vector<double> &parameters) const = 0;
 
@@ -46,7 +46,7 @@ class GeneralFunction
      *
      * \param parameters Coordinates in which the gradient is evaluated
      * \return Gradient vector on the given parameters.
-     * \throw std::exception parameters size and number of dimensions are not equal.
+     * \throw std::domain_error parameters size and number of dimensions are not equal.
      */
     virtual std::vector<double> get_gradient(const std::vector<double> &parameters) const = 0;
 

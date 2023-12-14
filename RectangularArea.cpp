@@ -22,7 +22,7 @@ bool RectangularArea::is_valid() const
 bool RectangularArea::contains(const std::vector<double> &point) const
 {
     if (point.size() != _dimensions)
-        throw std::exception("Wrong number of dimensions.");
+        throw std::logic_error("Wrong number of dimensions.");
 
     for (size_t i{}; i < _dimensions; ++i)
     {

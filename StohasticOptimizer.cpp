@@ -9,9 +9,9 @@ StohasticOptimizer::StohasticOptimizer(const GeneralFunction *f, std::vector<dou
     _current_function_value(_function->evaluate(*_trajectory.rbegin())), _generator()
 {
     if (_p < 0 || _p > 1)
-        throw std::exception("Probability p must be in range [0,1].");
+        throw std::domain_error("Probability p must be in range [0,1].");
     if (_alpha < 0)
-        throw std::exception("Reduction rate alpha must be non-negative");
+        throw std::domain_error("Reduction rate alpha must be non-negative");
 
     std::random_device rd;
     _generator.seed(rd());

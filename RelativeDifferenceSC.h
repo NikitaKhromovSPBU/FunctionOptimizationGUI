@@ -1,5 +1,6 @@
 #pragma once
 #include "GeneralStopCriterion.h"
+#include <stdexcept>
 
 /**
  * Implements a stopping criterion based on the ratio between an absolute difference of values of the function at last two different points and an absolute value of the function on the previous point, different from current.
@@ -14,7 +15,7 @@ class RelativeDifferenceSC : public GeneralStopCriterion
         : GeneralStopCriterion(StopCriterionType::RelativeDifference, iterations_number), _precision(precision)
     {
         if (precision <= 0)
-            throw std::exception("Precision must be a positive number.");
+            throw std::domain_error("Precision must be a positive number.");
     };
 
     RelativeDifferenceSC(const RelativeDifferenceSC &sc) = default;
@@ -22,7 +23,7 @@ class RelativeDifferenceSC : public GeneralStopCriterion
     void set_precision(double precision)
     {
         if (precision <= 0)
-            throw std::exception("Precision must be a positive number.");
+            throw std::domain_error("Precision must be a positive number.");
         else
             _precision = precision;
     }
@@ -41,7 +42,7 @@ class RelativeDifferenceSC : public GeneralStopCriterion
      * \param trajectory Trajectory of the optimization process.
      * \param function A function being optimized.
      * \return true if the optimization process should be stopped, false otherwise.
-     * \throw std::exception The size of one of the points in trajectory and the number of dimensions are not equal.
+     * \throw std::logic_error The size of one of the points in trajectory and the number of dimensions are not equal.
      */
     bool stop_criterion(const std::vector<std::vector<double>> &trajectory,
                         const GeneralFunction *function) const override;

@@ -6,7 +6,7 @@ GeneralOptimizer::GeneralOptimizer(const GeneralFunction *f, const std::vector<d
       _result_function_value(std::numeric_limits<double>::quiet_NaN())
 {
     if (!_area.contains(starting_point))
-        throw std::exception("Starting point must be within the given rectangular area.");
+        throw std::domain_error("Starting point must be within the given rectangular area.");
 }
 
 double GeneralOptimizer::optimize()

@@ -17,7 +17,7 @@ double find_interception(const std::vector<double> &v, const std::vector<double>
                          const RectangularArea &rect)
 {
     if (v.size() != rect.get_dimensions())
-        throw std::exception("Number of dimensions of vector and rectangle are not equal.");
+        throw std::logic_error("Number of dimensions of vector and rectangle are not equal.");
 
     double res = std::min(abs((start_point[0] - rect[0]) / v[0]), abs((start_point[0] - rect[1]) / v[0]));
     for (size_t i{1}; i < v.size(); ++i)
