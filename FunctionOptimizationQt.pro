@@ -25,6 +25,7 @@ SOURCES += \
     RosenbrockFunction.cpp \
     StohasticOptimizer.cpp \
     plotscene.cpp \
+    plotview.cpp \
     settings.cpp
 
 HEADERS += \
@@ -43,6 +44,7 @@ HEADERS += \
     RosenbrockFunction.h \
     StohasticOptimizer.h \
     plotscene.h \
+    plotview.h \
     settings.h
 
 FORMS += \

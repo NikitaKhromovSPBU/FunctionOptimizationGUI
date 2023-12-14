@@ -2,6 +2,7 @@
 #define PLOTSCENE_H
 
 #include <QGraphicsScene>
+#include <QResizeEvent>
 
 class PlotScene : public QGraphicsScene
 {

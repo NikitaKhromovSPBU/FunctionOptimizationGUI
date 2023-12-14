@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "ui_mainwindow.h"
 #include "plotscene.h"
+#include "plotview.h"
 #include "AbsoluteValueDifferenceSC.h"
 #include "ExpModulatedSin.h"
 #include "FletcherReevesOptimizer.h"
@@ -13,14 +14,24 @@
 #include "StohasticOptimizer.h"
 
 #include <limits>
+#include <QGraphicsView>
+#include <QGraphicsTextItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), function_id(2), method_id(1), criterion_id(1), max_iterations(1000),
-    sample_rate(10), precision(0.), p(0.), alpha(1.), delta(0.), starting_point({0, 0}), rect_area(std::vector<double>{-6, 6, -6, 6}),
+    sample_rate(10), precision(1e-3), p(0.5), alpha(0.5), delta(1), starting_point({0, 0}), rect_area(std::vector<double>{-6, 6, -6, 6}),
     function(nullptr), optimizer(nullptr), stop_criterion(nullptr)
 {
     ui->setupUi(this);
+    connect(ui->function_plot, &PlotView::viewResized, this, &MainWindow::on_view_resized);
+
+    ui->z_start->hide();
+    ui->z_start_label->hide();
+    ui->z_end->hide();
+    ui->z_end_label->hide();
+    ui->func_name->setText("Himmelblau function");
+    ui->max_iterations->setText(QString::number(max_iterations));
 
     optimization_setup();
     std::vector<std::vector<double>> grid(make_grid());
@@ -71,12 +82,21 @@ void MainWindow::on_actionSettings_triggered()
             ui->z_end->show();
             ui->z_end_label->show();
             ui->z_start->setText(QString::number(starting_point[2], 'g', 2));
+            ui->function_plot->scene()->clear();
+
+            QGraphicsTextItem *text = ui->function_plot->scene()->addText("Rosenbrock function is 3-dimensional\nPlotting is unavailable");
+
+            text->setPos(ui->function_plot->width() / 3, ui->function_plot->height() / 2 - 16);
         }
         else {
             ui->z_start->hide();
             ui->z_start_label->hide();
             ui->z_end->hide();
             ui->z_end_label->hide();
+
+            optimization_setup();
+            std::vector<std::vector<double>> grid(make_grid());
+            plot_graph(grid);
         }
 
         ui->func_name->setText(settings.get_function_name());
@@ -269,6 +289,19 @@ void MainWindow::plot_trajectory(const std::vector<std::vector<double>>& traject
         scene->addLine(last_point_x, last_point_y, new_point_x, new_point_y, red_pen);
         last_point_x = new_point_x;
         last_point_y = new_point_y;
+    }
+}
+
+void MainWindow::on_view_resized() {
+    if (function_id == 4) {
+        ui->function_plot->scene()->clear();
+        QGraphicsTextItem *text = ui->function_plot->scene()->addText("Rosenbrock function is 3-dimensional\nPlotting is unavailable");
+
+        text->setPos(ui->function_plot->width() / 3, ui->function_plot->height() / 2 - 16);
+    }
+    else{
+        std::vector<std::vector<double>> grid(make_grid());
+        plot_graph(grid);
     }
 }
 

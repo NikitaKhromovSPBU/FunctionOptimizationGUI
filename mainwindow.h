@@ -32,6 +32,8 @@ private slots:
 
     void on_scene_clicked(QPointF point);
 
+    void on_view_resized();
+
 private:
     Ui::MainWindow *ui;
 

@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <widget class="QGraphicsView" name="function_plot">
+     <widget class="PlotView" name="function_plot">
       <property name="minimumSize">
        <size>
         <width>600</width>
@@ -386,6 +386,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotView</class>
+   <extends>QGraphicsView</extends>
+   <header>plotview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>

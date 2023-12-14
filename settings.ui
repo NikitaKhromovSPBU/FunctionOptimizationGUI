@@ -197,7 +197,7 @@
            <item row="1" column="2">
             <widget class="QDoubleSpinBox" name="alpha_spin">
              <property name="value">
-              <double>1.000000000000000</double>
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -205,6 +205,9 @@
             <widget class="QSlider" name="p_slider">
              <property name="maximum">
               <number>99</number>
+             </property>
+             <property name="value">
+              <number>50</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -236,7 +239,7 @@
               <number>100</number>
              </property>
              <property name="value">
-              <number>100</number>
+              <number>50</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -261,6 +264,9 @@
              <property name="singleStep">
               <double>0.010000000000000</double>
              </property>
+             <property name="value">
+              <double>0.500000000000000</double>
+             </property>
             </widget>
            </item>
           </layout>
@@ -280,7 +286,7 @@
            <item row="0" column="1">
             <widget class="QLineEdit" name="delta">
              <property name="text">
-              <string>0</string>
+              <string>1</string>
              </property>
             </widget>
            </item>
